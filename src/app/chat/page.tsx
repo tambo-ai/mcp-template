@@ -18,6 +18,7 @@ export default function Home() {
       <TamboProvider
         apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
         components={components}
+        tamboUrl={process.env.NEXT_PUBLIC_TAMBO_URL}
       >
         <TamboMcpProvider mcpServers={mcpServers}>
           <div className="w-full max-w-4xl mx-auto">
