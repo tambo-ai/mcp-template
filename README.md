@@ -1,6 +1,6 @@
-# Tambo MCP Template
+# Tambo Client-side MCP Template
 
-This is a starter NextJS app with tambo-ai for generative UI and MCP.
+This is a starter NextJS app with tambo-ai for generative UI and Client-sideMCP.
 
 [![Watch the tutorial here](https://img.youtube.com/vi/6zDDPfr7Aoo/0.jpg)](https://youtu.be/6zDDPfr7Aoo)
 
@@ -16,17 +16,17 @@ This is a starter NextJS app with tambo-ai for generative UI and MCP.
 
 4. Run `npm run dev` and go to `localhost:3000` to use the app!
 
-### Configure Model Context Protocol (MCP) Servers
+### Configure Client-side Model Context Protocol (MCP) Servers
 
-You can go to https://localhost:3000/mcp-config to add MCP servers.
+You can go to https://localhost:3000/mcp-config to add client-sideMCP servers. These servers are stored in browser localStorage and loaded when the application starts.
 
 For the demo above we used smithery.ai's [brave-search-mcp](https://smithery.ai/server/@mikechao/brave-search-mcp)
 
 ![brave-search-mcp](./brave-search-mcp.png)
 
-You can use any MCP compatible server that supports SSE or HTTP.
+You can use any MCP compatible server that supports SSE or HTTP, but we do not support any server that requires OAuth. For authentication, you can pass custom HTTP headers to the MCP server configuration, or configure server-side authentication at https://tambo.co/dashboard.
 
-Our MCP config page is built using the tambo-ai/react/mcp package:
+Our MCP config page is built using the `@tambo-ai/react/mcp` package:
 
 ```tsx
 // In your chat page
@@ -40,9 +40,7 @@ Our MCP config page is built using the tambo-ai/react/mcp package:
 </TamboProvider>
 ```
 
-In this example, MCP servers are stored in browser localStorage and loaded when the application starts.
-
-You could have these servers be stored in a database or fetched from an API.
+MCP servers in this example are stored in browser localStorage and loaded on application start. Alternatively, you can store them in a database or fetch them from an API.
 
 For more detailed documentation, visit [Tambo's official docs](https://tambo.co/docs).
 
