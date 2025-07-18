@@ -9,7 +9,7 @@
  */
 
 import { DataCard, dataCardSchema } from "@/components/ui/card-data";
-import { Graph, graphSchema } from "@/components/ui/graph";
+import { Graph, graphSchema } from "@/components/tambo/graph";
 import type { TamboComponent } from "@tambo-ai/react";
 import { TamboTool } from "@tambo-ai/react";
 

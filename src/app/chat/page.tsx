@@ -1,6 +1,6 @@
 "use client";
 import { McpConfigButton } from "@/components/ui/mcp-config-button";
-import { MessageThreadFull } from "@/components/ui/message-thread-full";
+import { MessageThreadFull } from "@/components/tambo/message-thread-full";
 import { loadMcpServers } from "@/lib/mcp-utils";
 import { components } from "@/lib/tambo";
 import { TamboProvider } from "@tambo-ai/react";

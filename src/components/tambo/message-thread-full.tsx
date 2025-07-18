@@ -1,36 +1,36 @@
 "use client";
 
-import type { messageVariants } from "@/components/ui/message";
 import {
   MessageInput,
-  MessageInputError,
-  MessageInputSubmitButton,
   MessageInputTextarea,
   MessageInputToolbar,
-} from "@/components/ui/message-input";
+  MessageInputSubmitButton,
+  MessageInputError,
+} from "@/components/tambo/message-input";
 import {
   MessageSuggestions,
-  MessageSuggestionsList,
   MessageSuggestionsStatus,
-} from "@/components/ui/message-suggestions";
-import { ScrollableMessageContainer } from "@/components/ui/scrollable-message-container";
-import {
-  ThreadContainer,
-  useThreadContainerContext,
-} from "@/components/ui/thread-container";
-import {
-  ThreadContent,
-  ThreadContentMessages,
-} from "@/components/ui/thread-content";
+  MessageSuggestionsList,
+} from "@/components/tambo/message-suggestions";
+import type { messageVariants } from "@/components/tambo/message";
 import {
   ThreadHistory,
   ThreadHistoryHeader,
-  ThreadHistoryList,
   ThreadHistoryNewButton,
   ThreadHistorySearch,
-} from "@/components/ui/thread-history";
+  ThreadHistoryList,
+} from "@/components/tambo/thread-history";
+import {
+  ThreadContent,
+  ThreadContentMessages,
+} from "@/components/tambo/thread-content";
+import {
+  ThreadContainer,
+  useThreadContainerContext,
+} from "@/components/tambo/thread-container";
+import { ScrollableMessageContainer } from "@/components/tambo/scrollable-message-container";
 import { useMergedRef } from "@/lib/thread-hooks";
-import { Suggestion } from "@tambo-ai/react";
+import type { Suggestion } from "@tambo-ai/react";
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 
@@ -44,7 +44,7 @@ export interface MessageThreadFullProps
   /**
    * Controls the visual styling of messages in the thread.
    * Possible values include: "default", "compact", etc.
-   * These values are defined in messageVariants from "@/components/ui/message".
+   * These values are defined in messageVariants from "@/components/tambo/message".
    * @example variant="compact"
    */
   variant?: VariantProps<typeof messageVariants>["variant"];
@@ -69,24 +69,24 @@ export const MessageThreadFull = React.forwardRef<
     </ThreadHistory>
   );
 
-  const populationSuggestions: Suggestion[] = [
+  const defaultSuggestions: Suggestion[] = [
     {
       id: "suggestion-1",
-      title: "Who is the new Pope?",
-      detailedSuggestion: "Who is the new Pope?",
-      messageId: "current-events-query",
+      title: "Get started",
+      detailedSuggestion: "What can you help me with?",
+      messageId: "welcome-query",
     },
     {
       id: "suggestion-2",
-      title: "Iran-India conflict?",
-      detailedSuggestion: "What is the status of the Iran-India conflict?",
-      messageId: "current-events-query",
+      title: "Learn more",
+      detailedSuggestion: "Tell me about your capabilities.",
+      messageId: "capabilities-query",
     },
     {
       id: "suggestion-3",
-      title: "Latest on tariffs?",
-      detailedSuggestion: "Whats the latest news on tariffs?",
-      messageId: "economic-query",
+      title: "Examples",
+      detailedSuggestion: "Show me some example queries I can try.",
+      messageId: "examples-query",
     },
   ];
 
@@ -96,7 +96,7 @@ export const MessageThreadFull = React.forwardRef<
       {historyPosition === "left" && threadHistorySidebar}
 
       <ThreadContainer ref={mergedRef} className={className} {...props}>
-        <ScrollableMessageContainer className="p-4 pt-12">
+        <ScrollableMessageContainer className="p-4">
           <ThreadContent variant={variant}>
             <ThreadContentMessages />
           </ThreadContent>
@@ -119,7 +119,7 @@ export const MessageThreadFull = React.forwardRef<
         </div>
 
         {/* Message suggestions */}
-        <MessageSuggestions initialSuggestions={populationSuggestions}>
+        <MessageSuggestions initialSuggestions={defaultSuggestions}>
           <MessageSuggestionsList />
         </MessageSuggestions>
       </ThreadContainer>

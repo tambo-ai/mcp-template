@@ -1,6 +1,5 @@
 "use client";
 
-import { createMarkdownComponents } from "@/components/ui/markdownComponents";
 import { checkHasContent, getSafeContent } from "@/lib/thread-hooks";
 import { cn } from "@/lib/utils";
 import type { TamboThreadMessage } from "@tambo-ai/react";
@@ -12,6 +11,7 @@ import { Check, ChevronDown, ExternalLink, Loader2, X } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { createMarkdownComponents } from "./markdown-components";
 
 /**
  * CSS variants for the message container
@@ -274,7 +274,7 @@ function getToolStatusMessage(
  * @component ToolcallInfo
  */
 const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
-  ({ className, markdown = true, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const { message, isLoading } = useMessageContext();
     const { thread } = useTambo();
@@ -312,13 +312,13 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-start text-xs opacity-50 pt-2",
+          "flex flex-col items-start text-xs opacity-50",
           className,
         )}
         data-slot="toolcall-info"
         {...props}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           <button
             type="button"
             aria-expanded={isExpanded}
@@ -346,8 +346,8 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
           <div
             id={toolDetailsId}
             className={cn(
-              "flex flex-col gap-1 pl-4 overflow-hidden transition-[max-height,opacity] duration-300",
-              isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+              "flex flex-col gap-1 p-3 overflow-hidden transition-[max-height,opacity,padding] duration-300 w-full",
+              isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0 p-0",
             )}
           >
             <span className="whitespace-pre-wrap">
@@ -359,25 +359,14 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
             </span>
             {associatedToolResponse && (
               <>
-                <span className="whitespace-pre-wrap font-medium">result:</span>
-                <div className="whitespace-pre-wrap">
+                <span className="whitespace-pre-wrap">result:</span>
+                <div>
                   {!associatedToolResponse.content ? (
                     <span className="text-muted-foreground italic">
                       Empty response
                     </span>
-                  ) : React.isValidElement(associatedToolResponse.content) ? (
-                    associatedToolResponse.content
-                  ) : markdown ? (
-                    <ReactMarkdown components={createMarkdownComponents()}>
-                      {typeof getSafeContent(associatedToolResponse.content) ===
-                      "string"
-                        ? (getSafeContent(
-                            associatedToolResponse.content,
-                          ) as string)
-                        : ""}
-                    </ReactMarkdown>
                   ) : (
-                    getSafeContent(associatedToolResponse.content)
+                    formatToolResult(associatedToolResponse.content)
                   )}
                 </div>
               </>
@@ -398,6 +387,34 @@ function keyifyParameters(
   return Object.fromEntries(
     parameters.map((p) => [p.parameterName, p.parameterValue]),
   );
+}
+
+/**
+ * Helper function to detect if content is JSON and format it nicely
+ * @param content - The content to check and format
+ * @returns Formatted content or original content if not JSON
+ */
+function formatToolResult(
+  content: TamboThreadMessage["content"],
+): React.ReactNode {
+  if (!content) return content;
+
+  const safeContent = getSafeContent(content);
+  if (typeof safeContent !== "string") return safeContent;
+
+  // Try to parse as JSON
+  try {
+    const parsed = JSON.parse(safeContent);
+    return (
+      <pre className="bg-muted/50 rounded-md p-3 text-xs overflow-x-auto overflow-y-auto max-w-full max-h-64">
+        <code className="font-mono break-words whitespace-pre-wrap">
+          {JSON.stringify(parsed, null, 2)}
+        </code>
+      </pre>
+    );
+  } catch {
+    return safeContent;
+  }
 }
 
 /**
@@ -450,7 +467,7 @@ const MessageRenderedComponentArea = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("pt-2", className)}
+      className={cn(className)}
       data-slot="message-rendered-component-area"
       {...props}
     >
@@ -478,7 +495,7 @@ const MessageRenderedComponentArea = React.forwardRef<
             </button>
           </div>
         ) : (
-          <div className="w-full pt-4 px-2">{message.renderedComponent}</div>
+          <div className="w-full pt-2 px-2">{message.renderedComponent}</div>
         ))}
     </div>
   );
