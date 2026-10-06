@@ -1,3 +1,5 @@
+> **Archived:** This repository is no longer maintained. Our current work is [Charming](https://usecharming.com), the collaborative cloud for apps you build.
+
 # Tambo Client-side MCP Template
 
 This is a starter NextJS app with tambo-ai for generative UI and Client-sideMCP.
